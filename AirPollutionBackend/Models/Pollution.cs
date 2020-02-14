@@ -10,6 +10,13 @@ namespace AirPollutionBackend.Models
         public string id { get; set; }
         public string cityId { get; set; }
         public string stateId { get; set; }
-        public string current { get; set; }
+        public Current current { get; set; }
+
+        public Pollution()
+        {
+            current = new Current();
+        }
     }
+
+
 }
