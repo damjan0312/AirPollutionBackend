@@ -116,7 +116,7 @@ namespace AirPollutionBackend.Services
 
         }
 
-        public static void deleteHistory(string Id)
+        public static bool deleteHistory(string Id)
         {
             var connectionString = "mongodb://localhost/?safe=true";
 
@@ -132,6 +132,7 @@ namespace AirPollutionBackend.Services
 
             collection.DeleteMany(filter);
 
+            return true;
         }
     }
 }
