@@ -16,5 +16,10 @@ namespace AirPollutionBackend.Controllers
         {
             return PollutionService.GetPollution(cityId,stateId);
         }
+        [System.Web.Http.Route("api/mostPolluted")]
+        public List<Pollution> getMostPollutedCities()
+        {
+            return PollutionService.getMostPollutedCities();
+        }
     }
 }
