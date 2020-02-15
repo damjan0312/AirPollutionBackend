@@ -77,5 +77,42 @@ namespace AirPollutionBackend.Services
             return pollutions;
 
         }
+
+        public static List<Pollution> getHistory(string cityId)
+        {
+            var connectionString = "mongodb://localhost/?safe=true";
+
+            var client = new MongoClient(connectionString);
+            var db = client.GetDatabase("airpollutionDB");
+
+            var collection = db.GetCollection<BsonDocument>("pollutionHistory");
+
+            var builder = Builders<BsonDocument>.Filter;
+
+            var filter = builder.Eq("cityId", ObjectId.Parse(cityId));
+
+            var documents = collection.Find(filter).ToList();
+
+            List<Pollution> pollutions = new List<Pollution>();
+
+            foreach (BsonDocument doc in documents)
+            {
+                Pollution p = new Pollution();
+                p.id = doc.AsBsonDocument["_id"].AsObjectId.ToString();
+                p.cityId = doc.AsBsonDocument["cityId"].AsObjectId.ToString();
+                p.stateId = doc.AsBsonDocument["stateId"].AsObjectId.ToString();
+                p.current.weather.timestamp = doc.AsBsonDocument["current"].AsBsonDocument["weather"].AsBsonDocument["ts"].AsString;
+                p.current.weather.temperature = doc.AsBsonDocument["current"].AsBsonDocument["weather"].AsBsonDocument["tp"].AsDouble.ToString();
+                p.current.weather.pressure = doc.AsBsonDocument["current"].AsBsonDocument["weather"].AsBsonDocument["pr"].AsDouble.ToString();
+                p.current.weather.humidity = doc.AsBsonDocument["current"].AsBsonDocument["weather"].AsBsonDocument["hu"].AsDouble.ToString();
+                p.current.pollution.timestamp = doc.AsBsonDocument["current"].AsBsonDocument["pollution"].AsBsonDocument["ts"].AsString;
+                p.current.pollution.aqius = doc.AsBsonDocument["current"].AsBsonDocument["pollution"].AsBsonDocument["aqius"].AsDouble.ToString();
+
+                pollutions.Add(p);
+            }
+
+            return pollutions;
+
+        }
     }
 }

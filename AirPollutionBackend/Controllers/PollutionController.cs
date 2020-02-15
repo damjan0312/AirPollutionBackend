@@ -21,5 +21,11 @@ namespace AirPollutionBackend.Controllers
         {
             return PollutionService.getMostPollutedCities();
         }
+
+        [System.Web.Http.Route("api/history")]
+        public List<Pollution> getHistory(string cityId)
+        {
+            return PollutionService.getHistory(cityId);
+        }
     }
 }
