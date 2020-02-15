@@ -12,9 +12,9 @@ namespace AirPollutionBackend.Controllers
     public class PollutionController : ApiController
     {
         [System.Web.Http.Route("api/pollution")]
-        public List<Pollution> getPollution()
+        public Pollution getPollution(string cityId,string stateId)
         {
-            return PollutionService.GetAllPollution();
+            return PollutionService.GetPollution(cityId,stateId);
         }
     }
 }

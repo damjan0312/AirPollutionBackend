@@ -12,7 +12,7 @@ namespace AirPollutionBackend.Services
 {
     public class PollutionService
     {
-        public static List<Pollution> GetAllPollution()
+        public static Pollution GetPollution(string cityId,string stateId)
         {
             var connectionString = "mongodb://localhost/?safe=true";
 
@@ -21,9 +21,11 @@ namespace AirPollutionBackend.Services
 
             var collection = db.GetCollection<BsonDocument>("pollution");
 
-            List<Pollution> pollution = new List<Pollution>();
+            var builder = Builders<BsonDocument>.Filter;
 
-            var documents = collection.Find(new BsonDocument()).ToList();
+            var filter = builder.Eq("cityId", ObjectId.Parse(cityId)) & builder.Eq("stateId", ObjectId.Parse(stateId));
+            
+            var documents = collection.Find(filter).ToList();
 
             foreach (BsonDocument doc in documents)
             {
@@ -36,12 +38,13 @@ namespace AirPollutionBackend.Services
                 p.current.weather.pressure = doc.AsBsonDocument["current"].AsBsonDocument["weather"].AsBsonDocument["pr"].AsDouble.ToString();
                 p.current.weather.humidity = doc.AsBsonDocument["current"].AsBsonDocument["weather"].AsBsonDocument["hu"].AsDouble.ToString();
                 p.current.pollution.timestamp = doc.AsBsonDocument["current"].AsBsonDocument["pollution"].AsBsonDocument["ts"].AsString;
-                p.current.pollution.aqius = doc.AsBsonDocument["current"].AsBsonDocument["pollution"].AsBsonDocument["aquis"].AsDouble.ToString();
+                p.current.pollution.aqius = doc.AsBsonDocument["current"].AsBsonDocument["pollution"].AsBsonDocument["aqius"].AsDouble.ToString();
 
-                pollution.Add(p);
+                return p;
             }
 
-            return pollution;
+            return null;
+            
         }
     }
 }
