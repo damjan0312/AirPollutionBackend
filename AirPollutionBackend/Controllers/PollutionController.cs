@@ -28,6 +28,8 @@ namespace AirPollutionBackend.Controllers
             return PollutionService.getHistory(cityId);
         }
 
+        [System.Web.Http.AcceptVerbs("GET", "POST")]
+        [System.Web.Http.HttpGet]
         [System.Web.Http.Route("api/deleteHistory")]
         public void deleteHistory(string cityId)
         {
