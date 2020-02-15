@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.ServiceModel;
 using System.Text;
 using MongoDB.Driver;
 using MongoDB.Bson;
@@ -58,7 +57,9 @@ namespace AirPollutionBackend.Services
 
             List<Pollution> pollutions = new List<Pollution>();
 
-            var documents = collection.Find((new BsonDocument())).Limit(5).Sort("{aquis:1}").ForEachAsync((doc) =>
+            var documents = collection.Find((new BsonDocument())).Limit(5).Sort("{aquis:1}").ToList();
+
+            foreach(BsonDocument doc in documents)
             {
                 Pollution p = new Pollution();
                 p.id = doc.AsBsonDocument["_id"].AsObjectId.ToString();
@@ -72,7 +73,7 @@ namespace AirPollutionBackend.Services
                 p.current.pollution.aqius = doc.AsBsonDocument["current"].AsBsonDocument["pollution"].AsBsonDocument["aqius"].AsDouble.ToString();
 
                 pollutions.Add(p);
-            });
+            }
             
             return pollutions;
 
@@ -112,6 +113,24 @@ namespace AirPollutionBackend.Services
             }
 
             return pollutions;
+
+        }
+
+        public static void deleteHistory(string cityId)
+        {
+            var connectionString = "mongodb://localhost/?safe=true";
+
+            var client = new MongoClient(connectionString);
+
+            var db = client.GetDatabase("airpollutionDB");
+
+            var collection = db.GetCollection<BsonDocument>("pollutionHistory");
+
+            var builder = Builders<BsonDocument>.Filter;
+
+            var filter = builder.Eq("cityId", ObjectId.Parse(cityId));
+
+            collection.DeleteMany(filter);
 
         }
     }

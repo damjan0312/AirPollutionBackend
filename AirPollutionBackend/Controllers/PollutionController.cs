@@ -27,5 +27,11 @@ namespace AirPollutionBackend.Controllers
         {
             return PollutionService.getHistory(cityId);
         }
+
+        [System.Web.Http.Route("api/deleteHistory")]
+        public void deleteHistory(string cityId)
+        {
+            PollutionService.deleteHistory(cityId);
+        }
     }
 }
