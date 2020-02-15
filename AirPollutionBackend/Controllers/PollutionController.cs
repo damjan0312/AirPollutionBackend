@@ -28,11 +28,12 @@ namespace AirPollutionBackend.Controllers
             return PollutionService.getHistory(cityId);
         }
 
-        
+        [System.Web.Http.AcceptVerbs("GET", "POST","DELETE")]
+        [System.Web.Http.HttpDelete]
         [System.Web.Http.Route("api/deleteHistory")]
-        public bool deleteHistory(string Id)
+        public void deleteHistory(string Id)
         {
-            return PollutionService.deleteHistory(Id);
+            PollutionService.deleteHistory(Id);
         }
     }
 }

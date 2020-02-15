@@ -116,7 +116,7 @@ namespace AirPollutionBackend.Services
 
         }
 
-        public static bool deleteHistory(string Id)
+        public static void deleteHistory(string Id)
         {
             var connectionString = "mongodb://localhost/?safe=true";
 
