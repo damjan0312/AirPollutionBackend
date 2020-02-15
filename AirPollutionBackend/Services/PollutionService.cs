@@ -116,7 +116,7 @@ namespace AirPollutionBackend.Services
 
         }
 
-        public static void deleteHistory(string cityId)
+        public static void deleteHistory(string Id)
         {
             var connectionString = "mongodb://localhost/?safe=true";
 
@@ -128,7 +128,7 @@ namespace AirPollutionBackend.Services
 
             var builder = Builders<BsonDocument>.Filter;
 
-            var filter = builder.Eq("cityId", ObjectId.Parse(cityId));
+            var filter = builder.Eq("_id", ObjectId.Parse(Id));
 
             collection.DeleteMany(filter);
 
